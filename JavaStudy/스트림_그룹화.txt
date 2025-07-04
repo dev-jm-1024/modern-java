@@ -1,0 +1,55 @@
+
+        List<Person> people = Arrays.asList(
+                new Person("홍길동", 23, "hong@naver.com", "남자"),
+                new Person("김영희", 45, "kimyh@gmail.com", "여자"),
+                new Person("이철수", 30, "lee123@daum.net", "남자"),
+                new Person("박지민", 52, "jimin_p@naver.com", "여자"),
+                new Person("최강찬", 27, "choi_kc@outlook.com", "남자"),
+                new Person("장민주", 44, "jangmj@gmail.com", "여자"),
+                new Person("오세훈", 29, "sehun_o@hanmail.net", "남자"),
+                new Person("윤소라", 36, "sora_y@kakao.com", "여자"),
+                new Person("강동원", 28, "dongwon.kang@naver.com", "남자"),
+                new Person("배수지", 11, "suzy_b@daum.net", "여자")
+        );
+
+        List<Integer> numbers = Arrays.asList(
+                1, 2, 3, 1, 2, 3, 4, 4, 4, 5, 6, 5, 6, 7, 7, 8, 9, 9, 9, 9, 10, 11, 11, 11, 12
+        );
+
+        enum PeopleGender {MALE, FEMALE}
+        enum AgeComparator {YB, OB} //30살 이상이면 OB 아니면 YB
+
+        Map<String, Map<AgeComparator, List<Person>>> result = people.stream()
+                .collect(
+                        groupingBy(Person::getGender,
+                                groupingBy(
+                                        human -> {
+                                            if(human.getAge() >= 30) {
+                                                return AgeComparator.OB;
+                                            }else{
+                                                return AgeComparator.YB;
+                                            }
+                                        }
+                                )
+
+                        )
+                );
+
+        for (Map.Entry<String, Map<AgeComparator, List<Person>>> genderEntry : result.entrySet()) {
+            String gender = genderEntry.getKey();
+            System.out.println("성별: " + gender);
+
+            Map<AgeComparator, List<Person>> ageMap = genderEntry.getValue();
+            for (Map.Entry<AgeComparator, List<Person>> ageEntry : ageMap.entrySet()) {
+                AgeComparator ageGroup = ageEntry.getKey();
+                System.out.println("  연령대: " + (ageGroup == AgeComparator.OB ? "OB (Old Boy)" : "YB (Young Boy)"));
+
+                List<Person> persons = ageEntry.getValue();
+                for (Person p : persons) {
+                    System.out.println("    - 이름: " + p.getName()
+                            + ", 나이: " + p.getAge()
+                            + ", 이메일: " + p.getEmail());
+                }
+            }
+            System.out.println(); // 개행
+        }
