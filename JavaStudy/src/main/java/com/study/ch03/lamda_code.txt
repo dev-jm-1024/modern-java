@@ -1,17 +1,4 @@
-package com.study;
-
-import com.study.ch02.*;
-import com.study.ch03.*;
-
-import java.lang.Runnable;
-import java.util.*;
-
-
-public class Main{
-
-    public static void main(String[] args) {
-
-        //1. Runnable
+//1. Runnable
         Runnable task = () -> System.out.println("Hello World");
         task.run();
 
@@ -38,5 +25,3 @@ public class Main{
         //7. BinaryOperator
         BinaryOperator<String> concat = (a, b) -> a + b;
         System.out.println(concat.apply("hello", "world"));
-    }
-}
