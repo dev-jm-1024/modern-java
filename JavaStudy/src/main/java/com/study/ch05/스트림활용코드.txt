@@ -1,0 +1,161 @@
+
+
+        List<Person> people = Arrays.asList(
+                new Person("홍길동", 23, "hong@naver.com", "남자"),
+                new Person("김영희", 25, "kimyh@gmail.com", "여자"),
+                new Person("이철수", 30, "lee123@daum.net", "남자"),
+                new Person("박지민", 22, "jimin_p@naver.com", "여자"),
+                new Person("최강찬", 27, "choi_kc@outlook.com", "남자"),
+                new Person("장민주", 24, "jangmj@gmail.com", "여자"),
+                new Person("오세훈", 29, "sehun_o@hanmail.net", "남자"),
+                new Person("윤소라", 26, "sora_y@kakao.com", "여자"),
+                new Person("강동원", 28, "dongwon.kang@naver.com", "남자"),
+                new Person("배수지", 21, "suzy_b@daum.net", "여자")
+        );
+
+        List<Integer> numbers = Arrays.asList(
+                1, 2, 3, 1, 2, 3, 4, 4, 4, 5, 6, 5, 6, 7, 7, 8, 9, 9, 9, 9, 10, 11, 11, 11, 12
+                );
+
+        //1. filter() 메소드와 //distinct 메소드 사용해서 필터링
+
+        System.out.println("\n성별이 남자인 경우만 필터링 - filter()이용");
+        List<Person> malePeople = people.stream()
+                .filter(person -> person.getGender().equals("남자"))
+                .collect(Collectors.toList());
+
+        malePeople.stream().forEach(System.out::println);
+
+        System.out.println("\n중복 숫자 필터링 필터링 - distinct()이용");
+        System.out.println("\n원본");
+        numbers.stream().forEach(System.out::println);
+        List<Integer> removeDistinctNumberList = numbers.stream()
+                .filter(i -> i % 2 == 0)
+                .distinct()
+                .collect(Collectors.toList());
+        System.out.println("\n결과: ");
+        removeDistinctNumberList.stream().forEach(System.out::println);
+
+
+
+        //2. 스트림 슬라이싱 -- takeWhile, dropWhile, limit
+
+        //2.1 takeWhile : 조건이 true 인 동안 요소 가져옴. -- 정렬되어있을 때 효율적임
+        List<Person> result1 = people.stream()
+                .sorted(Comparator.comparing(Person::getAge))
+                .takeWhile(person -> person.getAge() <= 25)
+                .collect(Collectors.toList());
+
+        System.out.println("\n나이가 25살 이하인 사람들 출력 - takeWhile 사용: 조건이 true 인 동안 요소 가져옴 ");
+        result1.stream().forEach(System.out::println);
+
+
+        //2.2 dropWhile : 조건이 true 인 동안 건너뛰고, 이후의 요소를 가져온다
+        System.out.println("\n나이가 25살 이상인 사람들 출력 - dropWhile 사용: 조건이 true 인 동안 건너뛰고 이후의 요소 가져옴 ");
+        List<Person> result2 = people.stream()
+                .sorted(Comparator.comparing(Person::getAge))
+                .dropWhile(person -> person.getAge() <= 25)
+                .collect(Collectors.toList());
+
+        result2.stream().forEach(System.out::println);
+
+        //2.3 limit : 앞의 n개만 자른다
+        System.out.println("\n앞에서 2개만 자른다. - limit(2) 사용 ");
+        List<Person> result3 = people.stream().limit(2).collect(Collectors.toList());
+        result3.stream().forEach(System.out::println);
+
+        //2.4 skip : 처음 n개 요소를 제외한 스트림 반환
+        System.out.println("\n앞에서 2개 제외하고 반환. - skip(2) 사용 ");
+        List<Person> result4 = people.stream().skip(2).collect(Collectors.toList());
+        result4.stream().forEach(System.out::println);
+
+
+   //3. 매핑
+        //map, Arrays.stream(), flatMap
+
+        //3.1 map() : "새로운 버전을 만든다" 라는 개념에 가깝다. "변환"에 가까운 "매핑"
+        List<String> peopleNameList = people.stream()
+                .sorted(Comparator.comparing(Person::getName))
+                .map(Person::getName)
+                .collect(Collectors.toList());
+        System.out.println("\nmap을 사용하여 이름만 가져옴.");
+        System.out.println(peopleNameList);
+
+        //3.2 Arrays.stream() : String 배열을 Stream<String>로 변환
+        // split():  문자열을 특정 구분자(정규 표현식 기준)로 나눠서 문자열 배열로 반환
+        String[] letters = {"a", "b", "c"};
+        Stream<String> stream = Arrays.stream(letters); //Arrays.stream() 통해 Stream으로 변환
+        //이렇게 바꿔줘야 flatMap에서 합치기 가능
+
+
+        //3.3 flatMap
+        List<String> words = List.of("java", "stream");
+        List<String> result = words.stream()
+                .flatMap(word -> Arrays.stream(word.split("")))
+                .distinct()
+                .collect(Collectors.toList());
+
+        /*
+
+        Map
+
+        List<String[]> => [ ["j", "a" ...], ["s", ..."m"]]
+        : 중첩구조 생성된다. --> 중복제거 어렵고 한 글자씩 작업 어렵다
+
+        flatMap 사용
+        : ["j", "a", ...."m"] Stream<String[]> -> Stream<String>으로 펼쳐짐
+         */
+
+    }
+
+        //4 검색과 매칭
+            //allMatch, anyMatch, findFirst, findAny
+
+            //4.1 anyMatch : 적어도 한 요소와 일치하는 지 확인할 때 --> 조건이 하나라도 일치
+
+            System.out.println("\n anyMatch 사용 --  조건이 하나라도 일치");
+            if(people.stream().anyMatch(Person::isEmailNaver)){
+                for(Person person : people){
+                    System.out.println(person);
+                }
+
+                System.out.println("\n naver 존재.");
+            }else{
+                System.out.println("naver없음");
+            }
+
+            //4.2 allMatch : 모든 요소가 일치 --> 모든 요소가 조건 만족 시 true
+
+            System.out.println("\n allMatch 사용 --  조건이 하나라도 일치");
+
+            if(people.stream().allMatch(Person::isEmailNaver)){
+                for(Person person : people){
+                    System.out.println(person);
+                }
+
+                System.out.println("\n 모든 메일이 naver 이다");
+            }else{
+                System.out.println("모든 메일이 naver이 아님");
+            }
+
+            //4.3 noneMatch : 모든 요소가 조건 만족하지 않는 경우
+
+            System.out.println("\nnoneMatch : 모든 요소가 조건 만족하지 않는 경우");
+
+            if(people.stream().noneMatch(person -> person.getAge() >100)){
+                for(Person person : people){
+                    System.out.println(person);
+                }
+
+                System.out.println("\n나이는 100보다 작음");
+            }else{
+                System.out.println("나이는 100보다 큼");
+            }
+
+            //4.4 요소 검색 : 아무거나 하나 반환 , 반환타입: Optional
+            Optional<Person> opt = people.stream()
+                    .filter(Person::isMale)
+                    .findAny();
+
+            //4.5 findFirst() : 항상 첫 번째 요소 반환
+

@@ -1,0 +1,88 @@
+
+        Trader raoul = new Trader("Raoul", "Cambridge");
+        Trader mario = new Trader("Mario", "Milan");
+        Trader alan = new Trader("Alan", "Cambridge");
+        Trader brian = new Trader("Brian", "Cambridge");
+
+        List<Transaction> transactions = Arrays.asList(
+                new Transaction(brian, 2011, 300),
+                new Transaction(raoul, 2012, 1000),
+                new Transaction(raoul, 2011, 400),
+                new Transaction(mario, 2012, 710),
+                new Transaction(mario, 2012, 700),
+                new Transaction(alan, 2012, 950)
+        );
+
+        //1. 2011년에 일어난 모든 트랜잭션 값을 오름차순으로 정리하시오.
+        System.out.println("1");
+        List<Transaction> m1 = transactions.stream()
+                .filter(ts -> ts.getYear() == 2011)
+                .sorted(Comparator.comparing(Transaction::getValue))
+                .collect(Collectors.toList());
+
+        m1.forEach(System.out::println);
+
+        //2. 거래자가 근무하는 모든 도시를 중복 없이 나열
+        System.out.println("2");
+        List<String> m2 = transactions.stream()
+                .map(transaction -> transaction.getTrader().getCity())
+                .distinct()
+                .collect(Collectors.toList());
+
+        m2.forEach(System.out::println);
+
+        //3. 케임브리지에서 근무하는 모든 거래자 찾아서 이름순으로 정렬
+        System.out.println("3");
+        List<Trader> m3 = transactions.stream()
+                .map(transaction -> transaction.getTrader())
+                .filter(trader -> trader.getCity().equals("Cambridge"))
+                .sorted(Comparator.comparing(Trader::getName))
+                .collect(Collectors.toList());
+
+        m3.forEach(System.out::println);
+
+        //모든 거래자 이름을 알파벳 순으로 정렬해서 반환하시오
+        System.out.println("4");
+        List<Trader> m4 = transactions.stream()
+                .map(Transaction::getTrader)
+                .sorted(Comparator.comparing(Trader::getName).reversed())
+                .collect(Collectors.toList());
+
+        m4.forEach(System.out::println);
+
+        //5. 밀라노에 거래자가 있는가?
+        System.out.println("5");
+        boolean m5 =
+                transactions.stream().anyMatch(transaction -> transaction.getTrader().getCity().equals("Milan"));
+        if(m5){
+            System.out.println("있음");
+        }else{
+            System.out.println("없음");
+        }
+
+        //6. 케임브리지에 거주하는 거래자의 모든 트랜잭션 값을 출력하시오
+        System.out.println("6");
+        List<Integer> m6 = transactions.stream()
+                        .filter(t -> t.getTrader().getCity().equals("Cambridge"))
+                                .map(Transaction::getValue)
+                                        .collect(Collectors.toList());
+
+        m6.forEach(System.out::println);
+
+
+        //7. 전체 트랜젝션 중 최댓값 얼마임?
+        System.out.println("7");
+        int m7 = transactions.stream()
+                .map(Transaction::getValue)
+                .reduce(0, Integer::max);
+
+        System.out.println(m7);
+
+        //8. 전체 트랜젝션 중 최솟값 얼마임?
+        System.out.println("7");
+        int m8 = transactions.stream()
+                .map(Transaction::getValue)
+                .reduce(0, Integer::min);
+
+        System.out.println(m8);
+
