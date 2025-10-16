@@ -1,7 +1,5 @@
 package com.study.ch08;
 
-import com.study.ch06.Product;
-
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

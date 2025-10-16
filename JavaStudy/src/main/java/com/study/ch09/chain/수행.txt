@@ -1,0 +1,12 @@
+        Handler number = new NumberHandler();
+        Handler english = new EnglishHandler();
+        Handler def = new DefaultHandler();
+
+        // 체인 연결
+        number.setNext(english);
+        english.setNext(def);
+
+        // 요청 처리
+        System.out.println(number.handle(new RequestMessage("123")).getMessage());
+        System.out.println(number.handle(new RequestMessage("Hello")).getMessage());
+        System.out.println(number.handle(new RequestMessage("안녕")).getMessage());

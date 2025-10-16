@@ -1,4 +1,4 @@
-package com.study.ch06;
+package com.study.common;
 
 public class Product {
 

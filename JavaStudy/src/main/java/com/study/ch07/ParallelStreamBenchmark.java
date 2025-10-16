@@ -1,3 +1,5 @@
+/*
+
 package com.study.ch07;
 
 import org.openjdk.jmh.annotations.*;
@@ -24,3 +26,4 @@ public class ParallelStreamBenchmark {
         System.gc();
     }
 }
+ */
