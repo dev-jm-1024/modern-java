@@ -1,10 +1,23 @@
 package com.study.ch11;
 
+import java.util.Optional;
+
 public class Car {
 
-    private Insurance insurance;
+    //기존
+//    private Insurance insurance;
+//
+//    public Insurance getInsurance() {
+//        return insurance;
+//    }
 
-    public Insurance getInsurance() {
+    private Optional<Insurance> insurance;
+
+    public Optional<Insurance> getInsurance() {
         return insurance;
+    }
+
+    public Car(Optional<Insurance> insurance) {
+        this.insurance = insurance;
     }
 }

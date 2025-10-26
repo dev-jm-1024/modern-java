@@ -2,6 +2,8 @@ package com.study.ch11;
 
 public class Ex01 {
 
+    //책에서 코드를 바꿔서 이 코드는 당연하게 오류가 생긴다.
+
     private static final String DEFAULT_VALUE = "Unknown";
 
     //1. 해당 메소드를 실행하면 어떠한 결과가 나타날까?
